@@ -13,6 +13,11 @@ app.use(session({
   cookie: {maxAge: 10000}
 }));
 
+app.use((req, res, next) => {
+  req.session.count = req.session.count ? ++req.session.count : 1;
+  next();
+})
+
 let middleGiaoDich = (req, res, next) => {
   if(req.session.daDangNhap) return next();
   res.redirect('/dangnhap')
