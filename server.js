@@ -13,7 +13,12 @@ app.use(session({
   cookie: {maxAge: 10000}
 }));
 
-app.get('/giaodich', (req, res) => res.send('Giao dich'))
+app.get('/giaodich', (req, res) => {
+  if(req.session.daDangNhap){
+    return res.send('Moi ban giao dich')
+  }
+  res.send('Ban phai dang nhap');
+});
 
 app.get('/dangnhap', (req, res) => {
   res.render('dangnhap');
@@ -24,5 +29,6 @@ app.post('/xulydangnhap', parser, (req, res) => {
   if(username != 'khoapham' || password != '123'){
     return res.send('Kiem tra lai thong tin user')
   }
+  req.session.daDangNhap = true;
   res.send('xin chao')
 })
