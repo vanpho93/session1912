@@ -13,14 +13,21 @@ app.use(session({
   cookie: {maxAge: 10000}
 }));
 
-app.get('/giaodich', (req, res) => {
-  if(req.session.daDangNhap){
-    return res.send('Moi ban giao dich')
-  }
-  res.send('Ban phai dang nhap');
+let middleGiaoDich = (req, res, next) => {
+  if(req.session.daDangNhap) return next();
+  res.redirect('/dangnhap')
+}
+
+app.get('/giaodich', middleGiaoDich, (req, res) => {
+  res.send('Moi ban giao dich');
 });
 
-app.get('/dangnhap', (req, res) => {
+let middleDangNhap = (req, res, next) => {
+  if(!req.session.daDangNhap) return next();
+  res.redirect('/giaodich');
+}
+
+app.get('/dangnhap', middleDangNhap, (req, res) => {
   res.render('dangnhap');
 })
 
